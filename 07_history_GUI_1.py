@@ -29,22 +29,35 @@ class Converter:
 
         self.to_history_button = Button(self.button_frame,
                                         text="History / Export  ",
-                                        bg="#CC6600",
+                                        bg="#004C99",
                                         fg=button_fg,
                                         font=button_font, width=12,
-                                        command=self.to_history)
+                                        state=DISABLED,
+                                        command=lambda: self.to_history(self.all_calculations))
         self.to_history_button.grid(row=1, column=0, padx=5, pady=5)
 
         # **** Remove when integrating!! ***
         self.to_history_button.config(state=NORMAL)
 
-    def to_history(self):
-        DisplayHistory(self)
+    def to_history(self, all_calculations):
+        HistoryExport(self, all_calculations)
 
 
-class DisplayHistory:
+class HistoryExport:
 
     def __init__(self, partner):
+
+        # set maximum number of calculations to 5
+        # this can be changed if we want to show fewer /
+        # more calculations
+        max_calcs = 5
+        self.var_max_calcs = IntVar()
+        self.var_max_calcs.set(max_calcs)
+
+        # Function converts contents of calculations list
+        # into a string.
+        calc_string_text = self.get_calc_string(calc_list)
+
         # setup dialogue box and background colour
         background = "#ffe6cc"
         self.history_box = Toplevel()
@@ -119,7 +132,7 @@ class DisplayHistory:
         self.dismiss_button = Button(self.button_frame,
                                      font=("Arial", "12", "bold"),
                                      text="Dismiss", bg="#666666",
-                                     fg="FFFFFF", width=12,
+                                     fg="#FFFFFF", width=12,
                                      command=partial(self.close_history,
                                                      partner))
         self.dismiss_button.grid(row=0, column=1, padx=10, pady=10)
